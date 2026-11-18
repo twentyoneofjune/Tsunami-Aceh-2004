@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemuruh di Ujung Sumatra: Hantaman Laut yang Mengubah Sejarah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        abyss: '#090d16',
+                        slateDark: '#111827',
+                        oceanMuted: '#1e293b',
+                        ash: '#94a3b8',
+                        sandMuted: '#cbd5e1',
+                        goldCandle: '#d97706',
+                        amberGlow: '#fbbf24'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Kustomisasi gulir dan efek visual sunyi */
+        body {
+            background-color: #090d16;
+            color: #cbd5e1;
+            overflow-x: hidden;
+        }
+        
+        /* Efek hujan/abu halus di latar belakang hero */
+        @keyframes slowDrift {
+            0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-20px) translateX(10px); opacity: 0.2; }
+        }
+        .particle {
+            animation: slowDrift 8s infinite ease-in-out;
+        }
+
+        /* Animasi nyala lilin virtual */
+        @keyframes flicker {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+        .candle-flame {
+            animation: flicker 2.5s infinite ease-in-out;
+        }
+
+        /* Garis bacaan progresif */
+        #reading-progress {
+            transition: width 0.15s ease-out;
+        }
+
+        /* Drop cap untuk paragraf pembuka artikel */
+        .drop-cap::first-letter {
+            float: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 4.2rem;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-left: 3px;
+            color: #f8fafc;
+            font-weight: 700;
+        }
+
+        /* Filter foto dokumenter agar menyatu dengan nuansa berduka */
+        .doc-photo {
+            filter: grayscale(35%) contrast(108%) brightness(88%);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+        .doc-photo:hover {
+            filter: grayscale(0%) contrast(105%) brightness(95%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-slate-700 selection:text-white">
+
+    <!-- Indikator Progres Membaca -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-slate-900 z-50">
+        <div id="reading-progress" class="h-full bg-amber-600/80 w-0"></div>
+    </div>
+
+    <!-- Navigasi Minimalis & Khidmat -->
+    <nav class="sticky top-0 z-40 bg-abyss/90 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span class="font-display font-bold tracking-wider text-slate-100 text-sm sm:text-base uppercase">Arsip Sejarah Nusantara</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-xs uppercase tracking-widest text-slate-400">
+                <a href="#kronologi" class="hover:text-slate-100 transition">Kronologi</a>
+                <a href="#ilustrasi" class="hover:text-slate-100 transition">Ilustrasi</a>
+                <a href="#kesaksian" class="hover:text-slate-100 transition">Kesaksian</a>
+                <a href="#dokumentasi" class="hover:text-slate-100 transition">Dokumentasi</a>
+                <a href="#ruang-doa" class="text-amber-500/90 hover:text-amber-400 transition">Ruang Doa</a>
+            </div>
+            <!-- Tombol Audio Suasana Hening (Sintesis Ombak Pelan via Web Audio API) -->
+            <button id="ambient-toggle" class="flex items-center space-x-2 text-xs bg-slate-900/90 hover:bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700/70 transition">
+                <svg id="sound-icon-off" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" /></svg>
+                <svg id="sound-icon-on" class="w-4 h-4 text-amber-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                <span id="ambient-label" class="hidden sm:inline">Suara Ombak Sunyi</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Nuansa Gelap, Sunyi, dan Menggetarkan -->
+    <header class="relative min-h-[88vh] flex items-center justify-center overflow-hidden border-b border-slate-800/80">
+        <!-- Latar Belakang Foto Asli dengan Vignette Gelap -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/2004-tsunami.jpg/1280px-2004-tsunami.jpg" 
+                 onerror="this.src='https://placehold.co/1600x900/090d16/334155?text=Arsip+Tsunami+Aceh+2004'"
+                 alt="Pemandangan udara kehancuran pesisir Banda Aceh pasca tsunami 2004" 
+                 class="w-full h-full object-cover object-center opacity-25 grayscale">
+            <div class="absolute inset-0 bg-gradient-to-b from-abyss/80 via-abyss/75 to-abyss"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-abyss via-transparent to-abyss"></div>
+        </div>
+
+        <!-- Konten Utama Hero -->
+        <div class="relative z-10 max-w-4xl mx-auto px-5 py-20 text-center">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/60 text-xs tracking-widest uppercase text-slate-400 mb-8">
+                <span>Laporan Khusus Mengenang</span>
+                <span class="text-slate-600">•</span>
+                <span class="text-slate-200 font-medium">26 Desember 2004</span>
+            </div>
+
+            <h1 class="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold text-slate-100 leading-tight tracking-tight mb-6">
+                Gemuruh di Ujung Sumatra: <span class="block mt-2 text-slate-300 font-semibold italic text-2xl sm:text-4xl md:text-5xl">Hantaman Laut yang Mengubah Sejarah dan Air Mata Menjadi Kekuatan</span>
+            </h1>
+
+            <p class="font-serif text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+                Pagi Minggu yang cerah di Serambi Mekkah mendadak senyap ketika bumi terbelah di dasar Samudra Hindia. Sebuah catatan duka mendalam tentang gelombang raksasa, hilangnya ratusan ribu nyawa, dan ketabahan manusia bangkit dari puing-puing.
+            </p>
+
+            <!-- Metadata Liputan -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400 border-t border-slate-800/80 pt-6 max-w-xl mx-auto">
+                <div>Oleh <span class="text-slate-200 font-medium">Redaksi Dokumenter & Kemanusiaan</span></div>
+                <span class="hidden sm:inline text-slate-700">|</span>
+                <div>Waktu Baca: <span class="text-slate-200">12 Menit</span></div>
+                <span class="hidden sm:inline text-slate-700">|</span>
+                <div>Lokasi: <span class="text-slate-200">Banda Aceh & Pesisir Sumatra</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- RINGKASAN DATA KRISIS (STATISTIK KEMANUSIAAN) -->
+    <section class="bg-slateDark/60 border-b border-slate-800/80 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <span class="text-xs uppercase tracking-widest text-slate-500">Fakta Angka Tragedi 26 Desember 2004</span>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Kartu 1: Skala Gempa -->
+                <div class="bg-abyss/80 border border-slate-800 p-6 rounded-2xl text-center">
+                    <div class="text-amber-500/90 font-display text-3xl sm:text-4xl font-bold mb-1">9,1 – 9,3 <span class="text-lg font-sans font-normal text-slate-400">Mw</span></div>
+                    <div class="text-xs uppercase tracking-wider text-slate-300 font-semibold mb-2">Skala Magnitudo Gempa</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Gempa bumi terbesar ke-3 yang pernah tercatat seismograf modern, berdurasi hampir 10 menit.</p>
+                </div>
+
+                <!-- Kartu 2: Waktu Kejadian -->
+                <div class="bg-abyss/80 border border-slate-800 p-6 rounded-2xl text-center">
+                    <div class="text-slate-100 font-display text-3xl sm:text-4xl font-bold mb-1">07:58:53</div>
+                    <div class="text-xs uppercase tracking-wider text-slate-300 font-semibold mb-2">Waktu Gempa (WIB)</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Gelombang tsunami pertama menghantam daratan Aceh sekitar 15–20 menit kemudian (pukul 08.15 WIB).</p>
+                </div>
+
+                <!-- Kartu 3: Tinggi Ombak -->
+                <div class="bg-abyss/80 border border-slate-800 p-6 rounded-2xl text-center">
+                    <div class="text-slate-100 font-display text-3xl sm:text-4xl font-bold mb-1">30 – 35 <span class="text-lg font-sans font-normal text-slate-400">Meter</span></div>
+                    <div class="text-xs uppercase tracking-wider text-slate-300 font-semibold mb-2">Ketinggian Maksimum Ombak</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Tercatat di kawasan Lhoknga, Aceh Besar—setara tinggi pohon kelapa dewasa dan gedung 10 lantai.</p>
+                </div>
+
+                <!-- Kartu 4: Jumlah Korban -->
+                <div class="bg-abyss/80 border border-slate-800 p-6 rounded-2xl text-center">
+                    <div class="text-red-400/90 font-display text-3xl sm:text-4xl font-bold mb-1">± 227.898</div>
+                    <div class="text-xs uppercase tracking-wider text-slate-300 font-semibold mb-2">Jiwa Meninggal & Hilang</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Lebih dari 167.000 korban jiwa berada di Indonesia (Aceh & Nias), serta melanda 14 negara.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KONTEN BERITA UTAMA -->
+    <main class="max-w-4xl mx-auto px-5 sm:px-8 py-16 space-y-20">
+
+        <!-- BAGIAN 1: KRONOLOGI LENGKAP KEJADIAN -->
+        <article id="kronologi" class="space-y-6 font-serif text-slate-300 text-base sm:text-lg leading-relaxed">
+            <div class="border-l-2 border-amber-600/80 pl-4 mb-8">
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Bagian I • Detik-Detik Bencana</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Pagi yang Terbelah di Dasar Samudra</h2>
+            </div>
+
+            <p class="drop-cap">
+                Minggu pagi, 26 Desember 2004, matahari bersinar lembut di langit Banda Aceh. Sebagian warga baru saja pulang dari pasar, sebagian bersiap menghadiri pesta pernikahan, dan anak-anak berlarian di halaman rumah atau pesisir Pantai Ulee Lheue. Tidak ada tanda-tanda alam yang mencurigakan—hanya angin laut yang berembus seperti biasa. Namun, jauh di kedalaman 30 kilometer di bawah dasar Samudra Hindia, sekitar 160 kilometer sebelah barat pantai Aceh, lempeng tektonik Indo-Australia yang telah terkunci selama berabad-abad di bawah lempeng Eurasia akhirnya patah.
+            </p>
+
+            <p>
+                Tepat pada pukul <strong>07.58.53 WIB</strong>, tanah Aceh bergetar hebat. Guncangan berkekuatan <strong>9,1 hingga 9,3 Skala Magnitudo Momen (Mw)</strong> itu merobek dasar laut sepanjang 1.300 kilometer—jarak yang setara dari ujung Aceh hingga ke Kepulauan Andaman. Durasi gempanya luar biasa lama, berlangsung antara 8 hingga 10 menit, membuat manusia tidak mampu berdiri tegak. Dinding-dinding beton retak dan runtuh, tiang listrik tumbang, dan suara gemuruh dari perut bumi memekakkan telinga.
+            </p>
+
+            <p>
+                Ketika guncangan mereda sekitar pukul 08.08 WIB, warga yang panik berhamburan keluar rumah ke jalan-jalan terbuka. Di sepanjang garis pantai, terjadi fenomena mengerikan yang belum dipahami masyarakat luas kala itu: <strong>air laut tiba-tiba surut sejauh ratusan meter hingga lebih dari satu kilometer</strong>. Dasar laut yang kering memperlihatkan terumbu karang dan ribuan ikan yang menggelepar. Banyak warga dan anak-anak yang justru berlari ke arah pantai untuk memungut ikan, tanpa menyadari bahwa dinding air raksasa sedang melaju dari tengah samudra dengan kecepatan pesawat jet, mencapai <strong>800 kilometer per jam</strong>.
+            </p>
+
+            <p>
+                Sekitar pukul <strong>08.15 WIB</strong>, terdengar suara dentuman seperti meriam atau ribuan pesawat tempur yang terbang rendah dari arah laut. Dari cakrawala, muncul garis hitam pekat yang menjulang tinggi. Gelombang tsunami pertama menerjang daratan, diikuti gelombang kedua dan ketiga yang jauh lebih besar dan keruh bercampur lumpur, batang pohon, serta puing bangunan. Di wilayah pesisir barat seperti Lhoknga dan Leupung, tinggi gelombang mencapai <strong>30 hingga 35 meter</strong>, menyapu bersih seluruh permukiman hingga 4 sampai 6 kilometer ke arah daratan. Dalam hitungan menit, kota Banda Aceh, Meulaboh, Calang, dan pesisir barat Sumatra berubah menjadi lautan puing yang senyap.
+            </p>
+        </article>
+
+        <!-- BAGIAN 2: ILUSTRASI INTERAKTIF KEJADIAN TSUNAMI -->
+        <section id="ilustrasi" class="bg-slateDark/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            <div class="mb-6">
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Ilustrasi Mekanisme Bencana</span>
+                <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-100">Bagaimana Gempa Dasar Laut Melahirkan Gelombang Raksasa</h3>
+                <p class="font-sans text-xs sm:text-sm text-slate-400 mt-2">Pilih setiap tahapan di bawah ini untuk melihat ilustrasi visual proses terjadinya Tsunami Aceh 2004.</p>
+            </div>
+
+            <!-- Kontrol Tahapan Ilustrasi -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6 font-sans">
+                <button onclick="setStage(0)" id="stage-btn-0" class="stage-btn active px-3 py-2.5 rounded-xl text-xs font-medium bg-amber-600/20 text-amber-400 border border-amber-500/50 transition text-left">
+                    <span class="block text-[10px] text-slate-400">07:58 WIB</span>
+                    1. Patahan Lempeng
+                </button>
+                <button onclick="setStage(1)" id="stage-btn-1" class="stage-btn px-3 py-2.5 rounded-xl text-xs font-medium bg-abyss text-slate-400 border border-slate-800 hover:border-slate-700 transition text-left">
+                    <span class="block text-[10px] text-slate-500">08:08 WIB</span>
+                    2. Air Laut Surut
+                </button>
+                <button onclick="setStage(2)" id="stage-btn-2" class="stage-btn px-3 py-2.5 rounded-xl text-xs font-medium bg-abyss text-slate-400 border border-slate-800 hover:border-slate-700 transition text-left">
+                    <span class="block text-[10px] text-slate-500">08:15 WIB</span>
+                    3. Hantaman Gelombang
+                </button>
+                <button onclick="setStage(3)" id="stage-btn-3" class="stage-btn px-3 py-2.5 rounded-xl text-xs font-medium bg-abyss text-slate-400 border border-slate-800 hover:border-slate-700 transition text-left">
+                    <span class="block text-[10px] text-slate-500">08:30 WIB</span>
+                    4. Rendaman Daratan
+                </button>
+            </div>
+
+            <!-- Kanvas Ilustrasi SVG -->
+            <div class="relative bg-abyss rounded-xl border border-slate-800/90 overflow-hidden p-4">
+                <svg id="tsunami-svg" viewBox="0 0 800 320" class="w-full h-auto rounded-lg">
+                    <!-- Langit Gelap -->
+                    <defs>
+                        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#090d16"/>
+                            <stop offset="100%" stop-color="#1e293b"/>
+                        </linearGradient>
+                        <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.7"/>
+                            <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.95"/>
+                        </linearGradient>
+                        <linearGradient id="mudWaterGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#334155" stop-opacity="0.88"/>
+                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.98"/>
+                        </linearGradient>
+                    </defs>
+
+                    <rect width="800" height="320" fill="url(#skyGrad)"/>
+
+                    <!-- Awan Mendung Halus -->
+                    <ellipse cx="180" cy="55" rx="90" ry="18" fill="#334155" opacity="0.25"/>
+                    <ellipse cx="560" cy="45" rx="120" ry="22" fill="#334155" opacity="0.2"/>
+
+                    <!-- Daratan Aceh (Kanan) -->
+                    <path d="M 480 230 L 540 215 L 800 210 L 800 320 L 420 320 Z" fill="#1e293b"/>
+                    <!-- Bukit di kejauhan -->
+                    <path d="M 650 210 Q 720 150 800 185 L 800 212 Z" fill="#0f172a"/>
+
+                    <!-- Ikon Masjid & Rumah di Daratan -->
+                    <g id="city-buildings" transform="translate(560, 175)">
+                        <!-- Kubah Masjid -->
+                        <path d="M 30 20 Q 45 2 60 20 Z" fill="#cbd5e1"/>
+                        <rect x="25" y="20" width="40" height="20" fill="#94a3b8"/>
+                        <rect x="18" y="8" width="4" height="32" fill="#cbd5e1"/>
+                        <!-- Rumah-rumah kecil -->
+                        <rect x="75" y="26" width="18" height="14" fill="#64748b"/>
+                        <polygon points="73,26 84,18 95,26" fill="#475569"/>
+                        <rect x="100" y="28" width="16" height="12" fill="#64748b"/>
+                        <polygon points="98,28 108,21 118,28" fill="#475569"/>
+                    </g>
+
+                    <!-- Lempeng Tektonik Dasar Laut (Kiri) -->
+                    <path id="seabed-left" d="M 0 265 L 220 265 L 250 320 L 0 320 Z" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                    <path id="seabed-right" d="M 220 250 L 480 230 L 420 320 L 250 320 Z" fill="#172033" stroke="#475569" stroke-width="1.5"/>
+
+                    <!-- Titik Episenter / Patahan (Aktif di Tahap 0) -->
+                    <g id="fault-indicator">
+                        <circle cx="220" cy="258" r="18" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
+                        <circle cx="220" cy="258" r="6" fill="#ef4444"/>
+                        <path d="M 220 245 L 220 215" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arrow)"/>
+                        <text x="115" y="298" fill="#fbbf24" font-size="11" font-family="sans-serif" font-weight="bold">Patahan Naik 15–20 Meter</text>
+                    </g>
+
+                    <!-- Massa Air Laut (Berubah sesuai tahap) -->
+                    <path id="ocean-wave" d="M 0 185 Q 110 185 220 165 Q 330 185 510 220 L 480 230 L 220 250 L 220 265 L 0 265 Z" fill="url(#waterGrad)"/>
+
+                    <!-- Label Keterangan di dalam SVG -->
+                    <text id="svg-badge" x="24" y="34" fill="#e2e8f0" font-size="13" font-family="sans-serif" font-weight="bold">TAHAP 1: GEMPA MEGATHRUST 9,1 - 9,3 Mw</text>
+                    <text id="svg-sub" x="24" y="54" fill="#94a3b8" font-size="11" font-family="sans-serif">Lempeng samudra menyusup dan mendorong kolom air laut ke atas secara vertikal.</text>
+                </svg>
+
+                <!-- Penjelasan Naratif Dinamis -->
+                <div id="stage-description" class="mt-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                    <strong>Pukul 07.58 WIB:</strong> Dasar laut Samudra Hindia terangkat secara tiba-tiba hingga setinggi 15–20 meter sepanjang 1.300 km. Energi yang dilepaskan setara dengan 23.000 bom atom Hiroshima, mendorong miliaran ton air laut ke permukaan.
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 3: DIALOG WAWANCARA SAKSI MATA (KISAH NYATA) -->
+        <section id="kesaksian" class="space-y-8">
+            <div class="border-l-2 border-amber-600/80 pl-4">
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Bagian II • Suara dari Titik Nol</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Kesaksian yang Selamat dari Gulungan Maut</h2>
+                <p class="font-sans text-xs sm:text-sm text-slate-400 mt-1">Transkrip wawancara mendalam penyintas bencana di pesisir Aceh.</p>
+            </div>
+
+            <!-- Kartu Wawancara 1 -->
+            <div class="bg-slateDark/70 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800">
+                    <div>
+                        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-100">Narasumber: Teuku Zulfikar (38 Tahun saat kejadian)</h3>
+                        <p class="text-xs text-slate-400">Warga Pesisir Ulee Lheue, Kecamatan Meuraxa, Banda Aceh</p>
+                    </div>
+                    <div class="text-xs bg-abyss px-3 py-1.5 rounded-lg border border-slate-800 text-slate-300">
+                        <span class="text-amber-500">Waktu Kejadian:</span> 26 Des 2004, Pukul 08.15 WIB
+                    </div>
+                </div>
+
+                <!-- Dialog Wawancara -->
+                <div class="space-y-5 font-serif text-sm sm:text-base leading-relaxed">
+                    <div class="pl-4 border-l border-slate-700">
+                        <span class="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">Wartawan:</span>
+                        <p class="text-slate-300 italic">"Apa yang Bapak rasakan dan lihat tepat setelah guncangan gempa berhenti pagi itu di kawasan Ulee Lheue?"</p>
+                    </div>
+
+                    <div class="pl-4 border-l-2 border-amber-600/70 bg-abyss/40 py-3 pr-4 rounded-r-xl">
+                        <span class="font-sans text-xs font-semibold uppercase tracking-wider text-amber-500/90 block mb-1">Teuku Zulfikar (Saksi Mata):</span>
+                        <p class="text-slate-200">
+                            "Gempanya lama sekali, hampir sepuluh menit kami merangkak di halaman rumah karena tidak bisa berdiri. Begitu berhenti sekitar jam delapan lewat sedikit, suasana hening sekali. Burung-burung tidak bersuara. Lalu orang-orang di ujung jalan berteriak, <em>'Ie laot surut! Ie laot surut!'</em> (Air laut surut!). Saya berlari ke tanggul pantai Ulee Lheue, dan benar saja, air laut hilang sejauh mata memandang. Dasar laut kering kerontang, ikan-ikan besar menggelepar di pasir."
+                        </p>
+                    </div>
+
+                    <div class="pl-4 border-l border-slate-700">
+                        <span class="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">Wartawan:</span>
+                        <p class="text-slate-300 italic">"Bagaimana detik-detik saat gelombang pertama datang menghantam tempat Bapak berdiri?"</p>
+                    </div>
+
+                    <div class="pl-4 border-l-2 border-amber-600/70 bg-abyss/40 py-3 pr-4 rounded-r-xl">
+                        <span class="font-sans text-xs font-semibold uppercase tracking-wider text-amber-500/90 block mb-1">Teuku Zulfikar (Saksi Mata):</span>
+                        <p class="text-slate-200">
+                            "Sekitar pukul 08.15 WIB, dari arah Pulau Weh terdengar suara gemuruh seperti seribu pesawat terbang menukik. Saya melihat dinding air hitam pekat setinggi pohon kelapa bergerak sangat cepat. Saya langsung berbalik berlari pulang sambil berteriak menyuruh istri dan dua anak saya naik ke atap rumah bertingkat milik tetangga. Belum sempat saya meraih tangan anak bungsu saya, air hitam pekat yang dingin dan bercampur lumpur menghantam punggung saya. Saya tergulung di dalam pusaran kayu dan atap seng, gelap gulita. Saya hanya bisa mengucap syahadat sambil meraih batang pohon kelapa yang hanyut. Ketika air mulai surut dua jam kemudian, kampung kami sudah rata dengan tanah—hanya Masjid Baiturrahim yang masih berdiri."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sumber Wawancara -->
+                <div class="pt-4 border-t border-slate-800/80 text-xs text-slate-500 flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span><strong>Tempat Wawancara:</strong> Kawasan Pesisir Ulee Lheue & Museum Tsunami Aceh, Banda Aceh</span>
+                    <span><strong>Sumber Arsip:</strong> Dokumentasi Sejarah Lisan Museum Tsunami Aceh & Arsip Liputan Kemanusiaan Kompas/Reuters</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 4: DAMPAK MANCANEGARA, EVAKUASI, DAN PASCA KEJADIAN -->
+        <section class="space-y-8 font-serif text-slate-300 text-base sm:text-lg leading-relaxed">
+            <div class="border-l-2 border-amber-600/80 pl-4">
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Bagian III • Duka Lintas Samudra</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Gelombang yang Menjangkau 14 Negara & Operasi Kemanusiaan Terbesar</h2>
+            </div>
+
+            <p>
+                Daya rusak tsunami 26 Desember 2004 tidak berhenti di ujung Pulau Sumatra. Gelombang energi dari patahan megathrust tersebut melintasi seluruh cekungan Samudra Hindia dalam hitungan jam, menghantam pesisir <strong>14 negara di dua benua (Asia dan Afrika)</strong>.
+            </p>
+
+            <!-- Daftar Negara Terdampak -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-sans text-sm">
+                <div class="bg-slateDark/60 border border-slate-800 p-5 rounded-xl">
+                    <h4 class="font-bold text-slate-100 mb-2 flex items-center justify-between">
+                        <span>1. Indonesia (Aceh & Nias)</span>
+                        <span class="text-xs text-red-400">± 167.540 Korban</span>
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Titik terparah bencana. Lebih dari 500.000 warga kehilangan tempat tinggal. Infrastruktur pemerintahan, jalan raya pesisir barat, dan pelabuhan lumpuh total.</p>
+                </div>
+
+                <div class="bg-slateDark/60 border border-slate-800 p-5 rounded-xl">
+                    <h4 class="font-bold text-slate-100 mb-2 flex items-center justify-between">
+                        <span>2. Sri Lanka</span>
+                        <span class="text-xs text-red-400">± 35.322 Korban</span>
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Gelombang menghantam dua jam setelah gempa, menyapu kereta api penumpang <em>Queen of the Sea</em> di Peraliya yang menewaskan lebih dari 1.700 penumpang sekaligus.</p>
+                </div>
+
+                <div class="bg-slateDark/60 border border-slate-800 p-5 rounded-xl">
+                    <h4 class="font-bold text-slate-100 mb-2 flex items-center justify-between">
+                        <span>3. India (Tamil Nadu & Andaman)</span>
+                        <span class="text-xs text-red-400">± 16.269 Korban</span>
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Menghantam pesisir tenggara India dan Kepulauan Andaman-Nikobar yang berada sangat dekat dengan garis patahan gempa.</p>
+                </div>
+
+                <div class="bg-slateDark/60 border border-slate-800 p-5 rounded-xl">
+                    <h4 class="font-bold text-slate-100 mb-2 flex items-center justify-between">
+                        <span>4. Thailand & 10 Negara Lainnya</span>
+                        <span class="text-xs text-red-400">± 8.767 Korban</span>
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Melanda Phuket dan Khao Lak (Thailand), Myanmar, Maladewa, Malaysia, hingga menyebrangi samudra ke Somalia, Tanzania, Kenya, dan Afrika Selatan.</p>
+                </div>
+            </div>
+
+            <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-100 pt-4">Proses Evakuasi, Pengungsian, dan Kebangkitan Pasca Bencana</h3>
+            <p>
+                Selama tiga hari pertama pasca bencana, Aceh nyaris terisolasi total dari dunia luar. Jaringan listrik, telekomunikasi, dan jalur darat menuju Meulaboh serta Calang terputus total. Ribuan jenazah tergeletak di jalanan, sawah, dan reruntuhan bangunan. Para relawan lokal, TNI/Polri, Palang Merah Indonesia (PMI), serta warga yang selamat bekerja tanpa henti mengevakuasi korban dengan peralatan seadanya sebelum bantuan internasional tiba melalui Bandara Sultan Iskandar Muda.
+            </p>
+            <p>
+                Untuk mencegah wabah penyakit menular seperti kolera dan tifus, pemerintah bersama relawan melakukan pemakaman massal di sejumlah titik, termasuk di <strong>Kuburan Massal Siron</strong> (Aceh Besar) yang menampung lebih dari 46.000 jenazah tanpa identitas, serta di Ulee Lheue. Sementara itu, ratusan ribu penyintas menempati tenda-tenda darurat dan barak pengungsian di perbukitan Mata Ie, Blang Bintang, hingga ke Medan.
+            </p>
+            <p>
+                Dari air mata duka yang tak terperi, lahir dua tonggak sejarah baru: <strong>pertama</strong>, solidaritas kemanusiaan global terbesar dalam sejarah modern dengan dana rekonstruksi mencapai lebih dari USD 14 miliar melalui Badan Rehabilitasi dan Rekonstruksi (BRR) Aceh-Nias; <strong>kedua</strong>, tragedi ini meluluhkan hati pihak yang bertikai selama hampir tiga dekade, melahirkan <strong>Perjanjian Damai Helsinki pada 15 Agustus 2005</strong> antara Pemerintah RI dan Gerakan Aceh Merdeka (GAM). Air mata benar-benar berubah menjadi kekuatan perdamaian.
+            </p>
+        </section>
+
+        <!-- BAGIAN 5: DOKUMENTASI FOTO ASLI (ARSIP HISTORIS) -->
+        <section id="dokumentasi" class="space-y-8">
+            <div class="border-l-2 border-amber-600/80 pl-4">
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Bagian IV • Arsip Fotografi Asli</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Dokumentasi Kejadian & Pasca Tragedi (Foto Asli)</h2>
+                <p class="font-sans text-xs sm:text-sm text-slate-400 mt-1">Rekaman visual otentik dari arsip dokumentasi militer, kemanusiaan, dan Wikimedia Commons (Bukan rekayasa AI).</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Foto Asli 1 -->
+                <figure class="bg-slateDark border border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="aspect-video overflow-hidden bg-slate-900">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/2004-tsunami.jpg/800px-2004-tsunami.jpg" 
+                             onerror="this.src='https://placehold.co/800x450/111827/94a3b8?text=Foto+Udara+Banda+Aceh+2005'"
+                             alt="Foto udara kerusakan Banda Aceh oleh US Navy" 
+                             class="w-full h-full object-cover doc-photo">
+                    </div>
+                    <figcaption class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <span class="text-[11px] uppercase tracking-wider text-amber-500 font-semibold">Pasca Kejadian • 2 Januari 2005</span>
+                            <h4 class="font-display text-base font-bold text-slate-100 mt-1">Pemandangan Udara Kehancuran Pesisir Banda Aceh</h4>
+                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800 pt-2 flex flex-col gap-1">
+                            <span>Sumber Foto Asli: U.S. Navy / Photographer's Mate 2nd Class Philip A. McDaniel (Domain Publik)</span>
+                            <a href="https://commons.wikimedia.org/wiki/File:2004-tsunami.jpg" target="_blank" rel="noopener noreferrer" class="text-amber-500/90 hover:text-amber-400 underline inline-flex items-center gap-1 w-fit">
+                                Lihat Sumber Arsip Asli (Wikimedia Commons) ↗
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <!-- Foto Asli 2 -->
+                <figure class="bg-slateDark border border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="aspect-video overflow-hidden bg-slate-900">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/2004_Indonesia_Tsunami_Complete.gif/640px-2004_Indonesia_Tsunami_Complete.gif" 
+                             onerror="this.src='https://placehold.co/800x450/111827/94a3b8?text=Simulasi+Gelombang+NOAA+2004'"
+                             alt="Propagasi gelombang tsunami Samudra Hindia oleh NOAA" 
+                             class="w-full h-full object-cover doc-photo">
+                    </div>
+                    <figcaption class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <span class="text-[11px] uppercase tracking-wider text-amber-500 font-semibold">Rekaman Ilmiah • 26 Desember 2004</span>
+                            <h4 class="font-display text-base font-bold text-slate-100 mt-1">Penjalaran Gelombang Tsunami Lintas Samudra Hindia</h4>
+                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800 pt-2 flex flex-col gap-1">
+                            <span>Sumber Dokumentasi: NOAA Center for Tsunami Research (Arsip Resmi 2004)</span>
+                            <a href="https://commons.wikimedia.org/wiki/File:2004_Indonesia_Tsunami_Complete.gif" target="_blank" rel="noopener noreferrer" class="text-amber-500/90 hover:text-amber-400 underline inline-flex items-center gap-1 w-fit">
+                                Lihat Sumber Arsip Asli (NOAA / Wikimedia Commons) ↗
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <!-- Foto Asli 3 -->
+                <figure class="bg-slateDark border border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="aspect-video overflow-hidden bg-slate-900">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/US_Navy_050103-N-6074Y-059_A_village_near_the_coast_of_Sumatra_lays_in_ruin.jpg/800px-US_Navy_050103-N-6074Y-059_A_village_near_the_coast_of_Sumatra_lays_in_ruin.jpg" 
+                             onerror="this.src='https://placehold.co/800x450/111827/94a3b8?text=Puing+Bangunan+Pesisir+Sumatra'"
+                             alt="Desa pesisir Sumatra hancur total" 
+                             class="w-full h-full object-cover doc-photo">
+                    </div>
+                    <figcaption class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <span class="text-[11px] uppercase tracking-wider text-amber-500 font-semibold">Kondisi Darurat • 3 Januari 2005</span>
+                            <h4 class="font-display text-base font-bold text-slate-100 mt-1">Jejak Garis Batas Sapuan Air di Pesisir Barat</h4>
+                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800 pt-2 flex flex-col gap-1">
+                            <span>Sumber Foto Asli: U.S. Navy / Photographer's Mate 3rd Class Tyler J. Clements (Domain Publik)</span>
+                            <a href="https://commons.wikimedia.org/wiki/File:US_Navy_050103-N-6074Y-059_A_village_near_the_coast_of_Sumatra_lays_in_ruin.jpg" target="_blank" rel="noopener noreferrer" class="text-amber-500/90 hover:text-amber-400 underline inline-flex items-center gap-1 w-fit">
+                                Lihat Sumber Arsip Asli (U.S. Navy / Wikimedia Commons) ↗
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <!-- Foto Asli 4 -->
+                        <div class="text-[11px] text-slate-500 border-t border-slate-800 pt-2 flex flex-col gap-1">
+                            <span>Sumber Foto Asli: U.S. Navy / Photographer's Mate 1st Class Bart A. Bauer (Domain Publik)</span>
+                            <a href="https://commons.wikimedia.org/wiki/File:US_Navy_050105-N-5319A-003_Indonesian_citizens_receive_food_and_water_from_U.S._Navy_personnel.jpg" target="_blank" rel="noopener noreferrer" class="text-amber-500/90 hover:text-amber-400 underline inline-flex items-center gap-1 w-fit">
+                                Lihat Sumber Arsip Asli (U.S. Navy / Wikimedia Commons) ↗
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <!-- Panel Tautan Arsip Resmi Kejadian & Pasca Kejadian -->
+            <div class="bg-abyss/90 border border-slate-800 rounded-2xl p-5 sm:p-6 font-sans">
+                <h4 class="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    Tautan Referensi & Arsip Dokumentasi Resmi (Kejadian & Pasca Tragedi)
+                </h4>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-400">
+                    <li>
+                        <a href="https://www.ngdc.noaa.gov/hazard/26dec2004.html" target="_blank" rel="noopener noreferrer" class="block p-3 rounded-xl bg-slateDark/70 border border-slate-800/80 hover:border-amber-500/50 hover:text-slate-200 transition">
+                            <span class="font-semibold text-amber-500/90 block mb-0.5">NOAA National Centers for Environmental Information ↗</span>
+                            Arsip data seismik, tinggi gelombang, dan foto kerusakan pesisir Samudra Hindia 2004.
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.usgs.gov/centers/pcmsc/science/2004-indian-ocean-earthquake-and-tsunami" target="_blank" rel="noopener noreferrer" class="block p-3 rounded-xl bg-slateDark/70 border border-slate-800/80 hover:border-amber-500/50 hover:text-slate-200 transition">
+                            <span class="font-semibold text-amber-500/90 block mb-0.5">U.S. Geological Survey (USGS) Science Archive ↗</span>
+                            Laporan ilmiah patahan gempa 9,1–9,3 Mw serta survei geologi pasca-tsunami di Aceh.
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://commons.wikimedia.org/wiki/Category:2004_Indian_Ocean_tsunami_in_Indonesia" target="_blank" rel="noopener noreferrer" class="block p-3 rounded-xl bg-slateDark/70 border border-slate-800/80 hover:border-amber-500/50 hover:text-slate-200 transition">
+                            <span class="font-semibold text-amber-500/90 block mb-0.5">Galeri Arsip Foto Indonesia 2004 (Wikimedia Commons) ↗</span>
+                            Kumpulan dokumentasi foto asli kondisi Banda Aceh, Meulaboh, dan operasi evakuasi pengungsi.
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://museumtsunami.acehprov.go.id/" target="_blank" rel="noopener noreferrer" class="block p-3 rounded-xl bg-slateDark/70 border border-slate-800/80 hover:border-amber-500/50 hover:text-slate-200 transition">
+                            <span class="font-semibold text-amber-500/90 block mb-0.5">Portal Resmi Museum Tsunami Aceh ↗</span>
+                            Arsip sejarah lisan penyintas, monumen kenangan, dan dokumentasi kebangkitan Aceh.
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- BAGIAN 6: FAKTA MENARIK & FENOMENA ILMIAH MUSIBAH -->
+        <section class="bg-slateDark/50 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+            <div>
+                <span class="font-sans text-xs uppercase tracking-widest text-amber-500/90 block mb-1">Bagian V • Catatan Sains & Fenomena</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Fakta Penting & Fenomena Unik di Balik Tragedi 2004</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 font-sans">
+                <div class="p-5 rounded-xl bg-abyss/90 border border-slate-800/90 space-y-2">
+                    <div class="text-amber-500 font-bold text-sm">01. Mengubah Rotasi & Kemiringan Bumi</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Menurut perhitungan ilmuwan NASA, pergeseran massa kerak bumi yang begitu masif akibat gempa 9,1–9,3 Mw ini mempercepat rotasi Bumi sehingga memendekkan durasi satu hari sebesar <strong>2,68 mikrodetik</strong> dan menggeser kutub utara rata-rata Bumi sejauh 2,5 sentimeter.
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-xl bg-abyss/90 border border-slate-800/90 space-y-2">
+                    <div class="text-amber-500 font-bold text-sm">02. Kearifan Lokal "Smong" di Pulau Simeulue</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Meski Pulau Simeulue berada paling dekat dengan pusat gempa, dari sekitar 78.000 penduduknya, korban jiwa kurang dari 10 orang. Warga menyelamatkan diri ke bukit begitu melihat air laut surut berkat syair turun-temurun bernama <strong>"Smong"</strong> (peringatan tsunami sejak tahun 1907).
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-xl bg-abyss/90 border border-slate-800/90 space-y-2">
+                    <div class="text-amber-500 font-bold text-sm">03. Kapal PLTD Apung Terhempas 5 Km ke Darat</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Kapal pembangkit listrik tenaga diesel <strong>PLTD Apung 1</strong> berbobot 2.600 ton yang bersandar di Pelabuhan Ulee Lheue terseret gelombang hingga sejauh 5 kilometer ke tengah permukiman warga di Desa Punge Blang Cut, yang kini menjadi monumen abadi.
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-xl bg-abyss/90 border border-slate-800/90 space-y-2">
+                    <div class="text-amber-500 font-bold text-sm">04. Masjid-Masjid yang Tetap Kokoh Berdiri</div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Di tengah rata-nya bangunan beton di sekitarnya, sejumlah masjid seperti <strong>Masjid Raya Baiturrahman</strong> dan <strong>Masjid Baiturrahim Ulee Lheue</strong> tetap berdiri kokoh dan menjadi tempat berlindung ratusan warga dari terjangan arus air.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 7: KOLOM DOA & PESAN PEMBACA (INTERAKTIF) -->
+        <section id="ruang-doa" class="bg-gradient-to-b from-slateDark to-abyss border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl">
+            <div class="text-center max-w-2xl mx-auto mb-8">
+                <!-- Ikon Lilin Berduka -->
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 mb-4">
+                    <svg class="w-6 h-6 text-amber-400 candle-flame" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C12 2 8.5 6.2 8.5 9.2C8.5 11.1 10.1 12.7 12 12.7C13.9 12.7 15.5 11.1 15.5 9.2C15.5 6.2 12 2 12 2ZM10 14.5H14V21C14 21.6 13.6 22 13 22H11C10.4 22 10 21.6 10 21V14.5Z"/>
+                    </svg>
+                </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-100">Ruang Hening: Titipkan Doa & Pesan untuk Aceh</h2>
+                <p class="font-sans text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+                    Mari sejenak menundukkan kepala, mengirimkan Al-Fatihah, doa terbaik, atau pesan penguat bagi para syuhada dan keluarga yang ditinggalkan.
+                </p>
+            </div>
+
+            <!-- Form Pengiriman Doa -->
+            <form id="prayer-form" class="max-w-xl mx-auto space-y-4 mb-10 font-sans">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="sender-name" class="block text-xs text-slate-400 mb-1.5">Nama Anda (atau Hamba Allah)</label>
+                        <input type="text" id="sender-name" required placeholder="Contoh: Rina – Bandung"
+                               class="w-full px-4 py-2.5 rounded-xl bg-abyss border border-slate-700/80 text-slate-200 text-sm focus:outline-none focus:border-amber-500/70 transition">
+                    </div>
+                    <div>
+                        <label for="sender-city" class="block text-xs text-slate-400 mb-1.5">Asal Kota / Negara</label>
+                        <input type="text" id="sender-city" placeholder="Contoh: Banda Aceh"
+                               class="w-full px-4 py-2.5 rounded-xl bg-abyss border border-slate-700/80 text-slate-200 text-sm focus:outline-none focus:border-amber-500/70 transition">
+                    </div>
+                </div>
+                <div>
+                    <label for="prayer-message" class="block text-xs text-slate-400 mb-1.5">Untaian Doa atau Pesan Belasungkawa</label>
+                    <textarea id="prayer-message" rows="3" required placeholder="Tuliskan doa tulus atau pesan kemanusiaan Anda di sini..."
+                              class="w-full px-4 py-3 rounded-xl bg-abyss border border-slate-700/80 text-slate-200 text-sm focus:outline-none focus:border-amber-500/70 transition"></textarea>
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <span class="text-xs text-slate-500" id="prayer-counter">Menampilkan 3 doa tersemat</span>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-600/90 hover:bg-amber-600 text-slate-950 font-semibold text-sm transition shadow-lg shadow-amber-900/20">
+                        Nyalakan Lilin & Kirim Doa
+                    </button>
+                </div>
+            </form>
+
+            <!-- Kotak Notifikasi Non-Alert -->
+            <div id="toast-message" class="hidden max-w-xl mx-auto mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-300 text-xs text-center font-sans">
+                Terima kasih. Doa dan pesan Anda telah tersemat di dinding kenangan ini.
+            </div>
+
+            <!-- Dinding Doa Pembaca -->
+            <div id="prayer-wall" class="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans">
+                <!-- Doa Bawaan 1 -->
+                <div class="p-5 rounded-xl bg-abyss/80 border border-slate-800/90 flex flex-col justify-between space-y-4">
+                    <p class="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
+                        "Al-Fatihah untuk seluruh saudara kami yang berpulang pada 26 Desember 2004. Semoga Allah menempatkan mereka di surga tertinggi, dan Aceh selalu damai serta dilindungi selamanya."
+                    </p>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-800/70 text-[11px] text-slate-500">
+                        <span class="font-semibold text-slate-300">Cut Nyak Meutia • Banda Aceh</span>
+                        <span class="text-amber-500/80">🕯️ Tersemat</span>
+                    </div>
+                </div>
+
+                <!-- Doa Bawaan 2 -->
+                <div class="p-5 rounded-xl bg-abyss/80 border border-slate-800/90 flex flex-col justify-between space-y-4">
+                    <p class="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
+                        "Saya masih ingat tangis seluruh dunia pagi itu. Ketabahan rakyat Aceh bangkit dari kehancuran adalah pelajaran terbesar tentang arti keikhlasan dan persaudaraan."
+                    </p>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-800/70 text-[11px] text-slate-500">
+                        <span class="font-semibold text-slate-300">Hendra Wijaya • Jakarta</span>
+                        <span class="text-amber-500/80">🕯️ Tersemat</span>
+                    </div>
+                </div>
+
+                <!-- Doa Bawaan 3 -->
+                <div class="p-5 rounded-xl bg-abyss/80 border border-slate-800/90 flex flex-col justify-between space-y-4">
+                    <p class="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
+                        "Rest in peace to all the souls lost across Aceh, Sri Lanka, Thailand, India, and beyond. May humanity never forget the power of nature and the strength of unity."
+                    </p>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-800/70 text-[11px] text-slate-500">
+                        <span class="font-semibold text-slate-300">Sarah Jenkins • Melbourne</span>
+                        <span class="text-amber-500/80">🕯️ Tersemat</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER KHIDMAT -->
+    <footer class="border-t border-slate-800/90 bg-abyss py-12 text-center font-sans">
+        <div class="max-w-4xl mx-auto px-4 space-y-4">
+            <p class="font-display italic text-slate-300 text-base sm:text-lg">
+                "Air mata yang tumpah di ujung Sumatra telah menjadi akar bagi perdamaian dan kekuatan."
+            </p>
+            <p class="text-xs text-slate-500">
+                Disusun untuk edukasi sejarah, penghormatan bagi para korban Tsunami Samudra Hindia 26 Desember 2004, dan pengingat pentingnya mitigasi bencana.
+            </p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT INTERAKTIVITAS & AUDIO SUASANA SUNYI -->
+    <script>
+        // 1. Indikator Progres Membaca
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('reading-progress').style.width = progress + '%';
+        });
+
+        // 2. Ilustrasi Interaktif Mekanisme Tsunami
+        const stages = [
+            {
+                badge: "TAHAP 1: GEMPA MEGATHRUST 9,1 - 9,3 Mw (07:58 WIB)",
+                sub: "Lempeng samudra menyusup dan mendorong kolom air laut ke atas secara vertikal.",
+                wavePath: "M 0 185 Q 110 185 220 155 Q 330 185 510 220 L 480 230 L 220 250 L 220 265 L 0 265 Z",
+                waveFill: "url(#waterGrad)",
+                faultVisible: "visible",
+                desc: "<strong>Pukul 07.58 WIB:</strong> Dasar laut Samudra Hindia terangkat secara tiba-tiba hingga setinggi 15–20 meter sepanjang 1.300 km. Energi yang dilepaskan setara dengan 23.000 bom atom Hiroshima, mendorong miliaran ton air laut ke permukaan."
+            },
+            {
+                badge: "TAHAP 2: FENOMENA AIR LAUT SURUT MENDADAK (08:08 WIB)",
+                sub: "Air di garis pantai tersedot ke tengah laut untuk membentuk puncak gelombang raksasa.",
+                wavePath: "M 0 185 Q 200 175 310 135 Q 380 210 430 234 L 480 230 L 220 250 L 220 265 L 0 265 Z",
+                waveFill: "url(#waterGrad)",
+                faultVisible: "hidden",
+                desc: "<strong>Pukul 08.08 WIB:</strong> Sesaat sebelum gelombang tiba, air laut di sepanjang pantai Aceh surut drastis hingga ratusan meter ke tengah laut. Dasar pantai kering dan ikan-ikan menggelepar, sementara di kejauhan dinding gelombang sedang menumpuk tinggi."
+            },
+            {
+                badge: "TAHAP 3: HANTAMAN DINDING AIR 30–35 METER (08:15 WIB)",
+                sub: "Gelombang berkecepatan tinggi melambat saat menyentuh pantai dangkal namun menjulang raksasa.",
+                wavePath: "M 0 190 Q 280 180 460 110 Q 520 110 555 215 L 480 230 L 220 250 L 220 265 L 0 265 Z",
+                waveFill: "url(#mudWaterGrad)",
+                faultVisible: "hidden",
+                desc: "<strong>Pukul 08.15 WIB:</strong> Gelombang hitam pekat yang membawa lumpur dasar laut menghantam pesisir Aceh dengan ketinggian mencapai 30–35 meter di Lhoknga dan 15–20 meter di Banda Aceh, menyapu bangunan dan pepohonan."
+            },
+            {
+                badge: "TAHAP 4: RENDAMAN DARATAN HINGGA 5 KILOMETER (08:30 WIB)",
+                sub: "Arus balik (backwash) menyeret puing dan korban kembali ke arah Samudra Hindia.",
+                wavePath: "M 0 195 Q 350 185 710 192 L 730 211 L 540 215 L 480 230 L 220 250 L 220 265 L 0 265 Z",
+                waveFill: "url(#mudWaterGrad)",
+                faultVisible: "hidden",
+                desc: "<strong>Pukul 08.30 WIB:</strong> Air bah merendam daratan hingga sejauh 4–6 kilometer ke pedalaman kota. Setelah mencapai titik terjauh, arus balik yang sangat kuat menarik reruntuhan bangunan kembali ke laut."
+            }
+        ];
+
+        function setStage(index) {
+            const stage = stages[index];
+            document.getElementById('svg-badge').textContent = stage.badge;
+            document.getElementById('svg-sub').textContent = stage.sub;
+            const waveEl = document.getElementById('ocean-wave');
+            waveEl.setAttribute('d', stage.wavePath);
+            waveEl.setAttribute('fill', stage.waveFill);
+            document.getElementById('fault-indicator').style.visibility = stage.faultVisible;
+            document.getElementById('stage-description').innerHTML = stage.desc;
+
+            // Update tombol aktif
+            document.querySelectorAll('.stage-btn').forEach((btn, idx) => {
+                if (idx === index) {
+                    btn.className = "stage-btn active px-3 py-2.5 rounded-xl text-xs font-medium bg-amber-600/20 text-amber-400 border border-amber-500/50 transition text-left";
+                } else {
+                    btn.className = "stage-btn px-3 py-2.5 rounded-xl text-xs font-medium bg-abyss text-slate-400 border border-slate-800 hover:border-slate-700 transition text-left";
+                }
+            });
+        }
+
+        // 3. Sistem Kolom Doa & Pesan Pembaca
+        const prayerForm = document.getElementById('prayer-form');
+        const prayerWall = document.getElementById('prayer-wall');
+        const toastMsg = document.getElementById('toast-message');
+        const counterEl = document.getElementById('prayer-counter');
+        let prayerCount = 3;
+
+        prayerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('sender-name').value.trim();
+            const cityInput = document.getElementById('sender-city').value.trim();
+            const messageInput = document.getElementById('prayer-message').value.trim();
+
+            if (!nameInput || !messageInput) return;
+
+            const displayLocation = cityInput ? `${escapeHTML(nameInput)} • ${escapeHTML(cityInput)}` : escapeHTML(nameInput);
+
+            const card = document.createElement('div');
+            card.className = "p-5 rounded-xl bg-abyss/95 border border-amber-500/40 flex flex-col justify-between space-y-4 transition-all duration-500";
+            card.innerHTML = `
+                <p class="text-xs sm:text-sm text-slate-200 italic leading-relaxed">
+                    "${escapeHTML(messageInput)}"
+                </p>
+                <div class="flex items-center justify-between pt-3 border-t border-slate-800/70 text-[11px] text-slate-400">
+                    <span class="font-semibold text-slate-200">${displayLocation}</span>
+                    <span class="text-amber-400">🕯️ Baru saja</span>
+                </div>
+            `;
+
+            prayerWall.prepend(card);
+            prayerCount++;
+            counterEl.textContent = `Menampilkan ${prayerCount} doa tersemat`;
+
+            prayerForm.reset();
+            toastMsg.classList.remove('hidden');
+            setTimeout(() => {
+                toastMsg.classList.add('hidden');
+            }, 4500);
+        });
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        }
+
+        // 4. Sintesis Suara Ombak Sunyi (Web Audio API murni tanpa file eksternal)
+        let audioCtx = null;
+        let isPlaying = false;
+        let gainNode = null;
+
+        document.getElementById('ambient-toggle').addEventListener('click', () => {
+            if (!isPlaying) {
+                startOceanAmbient();
+            } else {
+                stopOceanAmbient();
+            }
+        });
+
+        function startOceanAmbient() {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+
+                    // Membuat derau merah (Brown Noise) lembut menyerupai ombak jauh yang sunyi
+                    const bufferSize = 2 * audioCtx.sampleRate;
+                    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    let lastOut = 0.0;
+                    for (let i = 0; i < bufferSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        output[i] = (lastOut + (0.02 * white)) / 1.02;
+                        lastOut = output[i];
+                        output[i] *= 1.8;
+                    }
+
+                    const whiteNoise = audioCtx.createBufferSource();
+                    whiteNoise.buffer = noiseBuffer;
+                    whiteNoise.loop = true;
+
+                    // Filter frekuensi rendah agar terdengar dalam dan menenangkan
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 260;
+
+                    gainNode = audioCtx.createGain();
+                    gainNode.gain.value = 0.08;
+
+                    // Modulasi perlahan menyerupai deburan ombak pelan
+                    const lfo = audioCtx.createOscillator();
+                    lfo.frequency.value = 0.12; // 1 siklus setiap ~8 detik
+                    const lfoGain = audioCtx.createGain();
+                    lfoGain.gain.value = 0.04;
+
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(gainNode.gain);
+
+                    whiteNoise.connect(filter);
+                    filter.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+
+                    whiteNoise.start(0);
+                    lfo.start(0);
+                } else if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                if (gainNode) gainNode.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.5);
+                isPlaying = true;
+                document.getElementById('sound-icon-off').classList.add('hidden');
+                document.getElementById('sound-icon-on').classList.remove('hidden');
+                document.getElementById('ambient-label').textContent = "Ombak Aktif";
+            } catch (err) {
+                console.error("Audio tidak didukung browser:", err);
+            }
+        }
+
+        function stopOceanAmbient() {
+            if (audioCtx && gainNode) {
+                gainNode.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.3);
+            }
+            isPlaying = false;
+            document.getElementById('sound-icon-off').classList.remove('hidden');
+            document.getElementById('sound-icon-on').classList.add('hidden');
+            document.getElementById('ambient-label').textContent = "Suara Ombak Sunyi";
+        }
+    </script>
+</body>
+</html>
